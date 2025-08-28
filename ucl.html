@@ -195,17 +195,25 @@
     <script>
 // Данные по матчам
 const matches = {
-  yesterday: [
+  1qual: [
     {
-      team1: "ABC",
-      team2: "XYZ",
+      team1: "SIN",
+      team2: "Izera",
+      goals1: 5,
+      goals2: 2,
+      img1: "SIN.png",
+      img2: "Izera.png"
+    },
+      {
+      team1: "ZAZ",
+      team2: "K-1",
       goals1: 2,
       goals2: 1,
-      img1: "abc.png",
-      img2: "xyz.png"
+      img1: "ZAZ.png",
+      img2: "K-1.png"
     }
   ],
-  today: [
+  2qual: [
     {
       team1: "SIN",
       team2: "IZERA",
@@ -223,7 +231,7 @@ const matches = {
       img2: "tt.png"
     }
   ],
-  tomorrow: [
+  3qual: [
     {
       team1: "AAA",
       team2: "BBB",
@@ -235,8 +243,8 @@ const matches = {
   ]
 };
 
-const days = ["yesterday", "today", "tomorrow"];
-let currentIndex = 1; // 1 = сегодня
+const days = ["1qual", "2qual", "3qual"];
+let currentIndex = 2; // 1 = сегодня
 
 function render() {
   const day = days[currentIndex];
@@ -879,6 +887,7 @@ render(); // показать "сегодня"
 </body>
 
 </html>
+
 
 
 
