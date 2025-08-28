@@ -109,8 +109,10 @@
 // Данные по матчам
 const matches = {
   "1qual": [
-    { team1: "SIN", team2: "Izera", goals1: 5, goals2: 2, img1: "SIN.png", img2: "Izera.png" },
-    { team1: "ZAZ", team2: "K-1", goals1: 2, goals2: 1, img1: "ZAZ.png", img2: "K-1.png" }
+    { box: "box", team1: "SIN", team2: "IZERA", goals1: 5, goals2: 2, img1: "SIN.png", img2: "Izera.png" },
+    { box: "box", team1: "ZAZ", team2: "K-1", goals1: 2, goals2: 1, img1: "ZAZ.png", img2: "K-1.png" },
+    { box: "box2", team1: "SANOS", team2: "ARRERA", goals1: 1, goals2: 2, img1: "Sanos.png", img2: "Arrera.png" },
+    { box: "box2", team1: "DANCER", team2: "KALANA", goals1: 1, goals2: 1, img1: "Dancer.png", img2: "Oldbac Kalana.png" }
   ],
   "2qual": [
     { team1: "SIN", team2: "IZERA", goals1: 5, goals2: 2, img1: "SIN.png", img2: "Izera.png" },
@@ -138,7 +140,7 @@ function render() {
   const list = matches[day]
     .map(
       (m) => `
-      <div class="box">
+      <div class="${m.box}">
         <div class="box-img"><img src="${m.img1}" alt=""></div>
         <div class="box-team1"><span class="span">${m.team1}</span></div>
         <div class="box-goals"><span class="span">${m.goals1}</span></div>
@@ -171,3 +173,4 @@ render(); // первый рендер
 </script>
 </body>
 </html>
+
