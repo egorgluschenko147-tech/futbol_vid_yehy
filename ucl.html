@@ -190,6 +190,90 @@
 
   <div class="container">
     <h2>Матчи</h2>
+    <button id="prev">⬅</button>
+    <button id="next">➡</button>
+    <script>
+// Данные по матчам
+const matches = {
+  yesterday: [
+    {
+      team1: "ABC",
+      team2: "XYZ",
+      goals1: 2,
+      goals2: 1,
+      img1: "abc.png",
+      img2: "xyz.png"
+    }
+  ],
+  today: [
+    {
+      team1: "SIN",
+      team2: "IZERA",
+      goals1: 5,
+      goals2: 2,
+      img1: "SIN.png",
+      img2: "Izera.png"
+    },
+    {
+      team1: "GG",
+      team2: "TT",
+      goals1: 3,
+      goals2: 3,
+      img1: "gg.png",
+      img2: "tt.png"
+    }
+  ],
+  tomorrow: [
+    {
+      team1: "AAA",
+      team2: "BBB",
+      goals1: 0,
+      goals2: 0,
+      img1: "aaa.png",
+      img2: "bbb.png"
+    }
+  ]
+};
+
+const days = ["yesterday", "today", "tomorrow"];
+let currentIndex = 1; // 1 = сегодня
+
+function render() {
+  const day = days[currentIndex];
+  const list = matches[day]
+    .map(
+      (m) => `
+      <div class="box">
+        <div class="box-img"><img src="${m.img1}" alt=""></div>
+        <div class="box-team1"><span class="span">${m.team1}</span></div>
+        <div class="box-goals"><span class="span">${m.goals1}</span></div>
+        <div class="box-vs"><span class="span">:</span></div>
+        <div class="box-goals"><span class="span">${m.goals2}</span></div>
+        <div class="box-team2"><span class="span">${m.team2}</span></div>
+        <div class="box-img"><img src="${m.img2}" alt=""></div>
+      </div>
+    `
+    )
+    .join("");
+
+  document.getElementById("matches").innerHTML = list;
+}
+
+document.getElementById("prev").onclick = () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    render();
+  }
+};
+document.getElementById("next").onclick = () => {
+  if (currentIndex < days.length - 1) {
+    currentIndex++;
+    render();
+  }
+};
+
+render(); // показать "сегодня"
+</script>
     <h2>1 кв раунд</h2>
     <div class="box">
       <div class="box-img"><img src="SIN.png" alt=""></div>
@@ -795,6 +879,7 @@
 </body>
 
 </html>
+
 
 
 
