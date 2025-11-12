@@ -540,78 +540,93 @@ document.getElementById("next").onclick = () => {
 
 const tables = document.querySelectorAll("table");
 
-// Функция для пересчета результатов
-function updateStandings() {
-  const results = {};
+function calculateStandings() {
+  const stats = {};
 
-  // Перебираем ВСЕ этапы
+  // 1. Считаем статистику по всем этапам
   for (const stage in matches) {
-    matches[stage].forEach(m => {
-      const { team1, team2, goals1, goals2 } = m;
-
-      // Добавляем команду в таблицу, если её еще нет
+    matches[stage].forEach(({ team1, team2, goals1, goals2 }) => {
       [team1, team2].forEach(team => {
-        if (!results[team]) {
-          results[team] = { team, games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
+        if (!stats[team]) {
+          stats[team] = { 
+            team, 
+            games: 0, wins: 0, draws: 0, losses: 0,
+            goalsFor: 0, goalsAgainst: 0, points: 0 
+          };
         }
       });
 
-      // Добавляем сыгранный матч
-      results[team1].games++;
-      results[team2].games++;
+      const home = stats[team1];
+      const away = stats[team2];
+      home.games++;
+      away.games++;
+      home.goalsFor += goals1;
+      home.goalsAgainst += goals2;
+      away.goalsFor += goals2;
+      away.goalsAgainst += goals1;
 
-      // Подсчет очков
       if (goals1 > goals2) {
-        results[team1].wins++;
-        results[team1].points += 3;
-        results[team2].losses++;
+        home.wins++; home.points += 3;
+        away.losses++;
       } else if (goals2 > goals1) {
-        results[team2].wins++;
-        results[team2].points += 3;
-        results[team1].losses++;
+        away.wins++; away.points += 3;
+        home.losses++;
       } else {
-        results[team1].draws++;
-        results[team2].draws++;
-        results[team1].points++;
-        results[team2].points++;
+        home.draws++; away.draws++;
+        home.points++; away.points++;
       }
     });
   }
 
-  // Преобразуем в массив и сортируем
-  const sortedTeams = Object.values(results).sort((a, b) => b.points - a.points);
+  // 2. Преобразуем в массив и сортируем
+  const sorted = Object.values(stats).sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    const diffA = a.goalsFor - a.goalsAgainst;
+    const diffB = b.goalsFor - b.goalsAgainst;
+    if (diffB !== diffA) return diffB - diffA;
+    return b.goalsFor - a.goalsFor;
+  });
 
-  // Обновляем таблицы
-  tables.forEach(table => {
-    const rows = table.querySelectorAll("tr.tr1, tr.tr2");
+  return sorted;
+}
 
-    rows.forEach((row, i) => {
-      const teamCell = row.querySelector("td:nth-child(3)");
-      if (!teamCell) return;
-      const teamName = teamCell.textContent.trim();
+function renderStandings() {
+  const standings = calculateStandings();
+  const table = document.querySelector("table");
 
-      const teamStats = results[teamName] || { games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
+  if (!table) return;
+  const tbody = table.querySelector("tbody") || table;
 
-      const cells = row.querySelectorAll("td");
-      if (cells.length >= 8) {
-        cells[0].textContent = i + 1; // позиция
-        cells[3].textContent = teamStats.games;
-        cells[4].textContent = teamStats.wins;
-        cells[5].textContent = teamStats.draws;
-        cells[6].textContent = teamStats.losses;
-        cells[7].textContent = teamStats.points;
-      }
-    });
+  // 1. Очищаем все строки (кроме заголовка)
+  tbody.querySelectorAll("tr.tr1, tr.tr2").forEach(tr => tr.remove());
+
+  // 2. Добавляем отсортированные строки заново
+  standings.forEach((t, i) => {
+    const tr = document.createElement("tr");
+    tr.className = i % 2 === 0 ? "tr1" : "tr2";
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td></td>
+      <td>${t.team}</td>
+      <td>${t.games}</td>
+      <td>${t.wins}</td>
+      <td>${t.draws}</td>
+      <td>${t.losses}</td>
+      <td>${t.points}</td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-// Запускаем обновление при загрузке
-updateStandings();
+// 3. Автообновление таблицы каждые 10 секунд (если матчи меняются)
+renderStandings();
+setInterval(renderStandings, 10000);
   
 render(); // первый рендер
 </script>
 </body>
 </html>
+
 
 
 
