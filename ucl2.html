@@ -641,10 +641,11 @@ function renderStandings() {
 // ==== Автообновление при изменении тура ====
 tourSelector.addEventListener("change", renderStandings);
 
+render(); // первый рендер
+  
 // ==== Первый запуск ====
 renderStandings();
-  
-render(); // первый рендер
 </script>
 </body>
 </html>
+
