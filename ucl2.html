@@ -555,17 +555,17 @@ document.getElementById("next").onclick = () => {
   }
 };
 
-// ==== Создаем селектор тура ====
-const tourSelector = document.createElement("select");
+  render();
+  
+// Создаём селектор туров
+const tourSelect = document.getElementById("tourSelect");
 for (let i = 1; i <= 8; i++) {
   const opt = document.createElement("option");
   opt.value = i;
   opt.textContent = `Тур ${i}`;
-  tourSelector.appendChild(opt);
+  tourSelect.appendChild(opt);
 }
-document.body.insertBefore(tourSelector, document.querySelector("table"));
 
-// ==== Подсчет и рендер ====
 function calculateStandings(upToTour) {
   const stats = {};
 
@@ -574,62 +574,32 @@ function calculateStandings(upToTour) {
     if (!round) continue;
 
     round.forEach(({ team1, team2, goals1, goals2 }) => {
-      // Приводим к нижнему регистру для сравнения
-      const t1key = team1.toLowerCase();
-      const t2key = team2.toLowerCase();
-
-      [ [t1key, team1], [t2key, team2] ].forEach(([key, name]) => {
-        if (!stats[key]) {
-          stats[key] = {
-            team: name, // запоминаем оригинальное имя (БАРСЕЛОНА)
-            games: 0,
-            wins: 0,
-            draws: 0,
-            losses: 0,
-            goalsFor: 0,
-            goalsAgainst: 0,
-            points: 0
-          };
-        }
+      [team1, team2].forEach(t => {
+        if (!stats[t]) stats[t] = { team: t, games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
       });
 
-      const home = stats[t1key];
-      const away = stats[t2key];
+      const home = stats[team1], away = stats[team2];
       home.games++; away.games++;
-      home.goalsFor += goals1; home.goalsAgainst += goals2;
-      away.goalsFor += goals2; away.goalsAgainst += goals1;
 
-      if (goals1 > goals2) {
-        home.wins++; home.points += 3; away.losses++;
-      } else if (goals2 > goals1) {
-        away.wins++; away.points += 3; home.losses++;
-      } else {
-        home.draws++; away.draws++; home.points++; away.points++;
-      }
+      if (goals1 > goals2) { home.wins++; home.points += 3; away.losses++; }
+      else if (goals1 < goals2) { away.wins++; away.points += 3; home.losses++; }
+      else { home.draws++; away.draws++; home.points++; away.points++; }
     });
   }
 
-  return Object.values(stats).sort((a, b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    const diffA = a.goalsFor - a.goalsAgainst;
-    const diffB = b.goalsFor - b.goalsAgainst;
-    if (diffB !== diffA) return diffB - diffA;
-    return b.goalsFor - a.goalsFor;
-  });
+  return Object.values(stats).sort((a,b) => b.points - a.points);
 }
 
 function renderStandings() {
-  const tour = parseInt(tourSelector.value);
-  const standings = calculateStandings(tour);
+  const upTo = parseInt(tourSelect.value);
+  const standings = calculateStandings(upTo);
   const tbody = document.querySelector("#standings tbody");
   tbody.innerHTML = "";
 
   standings.forEach((t, i) => {
     const tr = document.createElement("tr");
-    tr.className = i % 2 === 0 ? "tr1" : "tr2";
     tr.innerHTML = `
       <td>${i + 1}</td>
-      <td></td>
       <td>${t.team}</td>
       <td>${t.games}</td>
       <td>${t.wins}</td>
@@ -641,14 +611,13 @@ function renderStandings() {
   });
 }
 
-// ==== Автообновление при изменении тура ====
-tourSelector.addEventListener("change", renderStandings);
-
-// ==== Первый запуск ====
+tourSelect.addEventListener("change", renderStandings);
+tourSelect.value = 1;
 renderStandings();
 </script>
 </body>
 </html>
+
 
 
 
