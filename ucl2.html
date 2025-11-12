@@ -538,10 +538,81 @@ document.getElementById("next").onclick = () => {
   }
 };
 
+const tables = document.querySelectorAll("table");
+
+// Функция для пересчета результатов
+function updateStandings() {
+  const results = {};
+
+  // Перебираем ВСЕ этапы
+  for (const stage in matches) {
+    matches[stage].forEach(m => {
+      const { team1, team2, goals1, goals2 } = m;
+
+      // Добавляем команду в таблицу, если её еще нет
+      [team1, team2].forEach(team => {
+        if (!results[team]) {
+          results[team] = { team, games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
+        }
+      });
+
+      // Добавляем сыгранный матч
+      results[team1].games++;
+      results[team2].games++;
+
+      // Подсчет очков
+      if (goals1 > goals2) {
+        results[team1].wins++;
+        results[team1].points += 3;
+        results[team2].losses++;
+      } else if (goals2 > goals1) {
+        results[team2].wins++;
+        results[team2].points += 3;
+        results[team1].losses++;
+      } else {
+        results[team1].draws++;
+        results[team2].draws++;
+        results[team1].points++;
+        results[team2].points++;
+      }
+    });
+  }
+
+  // Преобразуем в массив и сортируем
+  const sortedTeams = Object.values(results).sort((a, b) => b.points - a.points);
+
+  // Обновляем таблицы
+  tables.forEach(table => {
+    const rows = table.querySelectorAll("tr.tr1, tr.tr2");
+
+    rows.forEach((row, i) => {
+      const teamCell = row.querySelector("td:nth-child(3)");
+      if (!teamCell) return;
+      const teamName = teamCell.textContent.trim();
+
+      const teamStats = results[teamName] || { games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
+
+      const cells = row.querySelectorAll("td");
+      if (cells.length >= 8) {
+        cells[0].textContent = i + 1; // позиция
+        cells[3].textContent = teamStats.games;
+        cells[4].textContent = teamStats.wins;
+        cells[5].textContent = teamStats.draws;
+        cells[6].textContent = teamStats.losses;
+        cells[7].textContent = teamStats.points;
+      }
+    });
+  });
+}
+
+// Запускаем обновление при загрузке
+updateStandings();
+  
 render(); // первый рендер
 </script>
 </body>
 </html>
+
 
 
 
