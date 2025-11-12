@@ -632,6 +632,7 @@ function renderTables() {
     const tbody = table.querySelector("tbody");
     tableData.forEach((t, i) => {
       const tr = document.createElement("tr");
+      tr.className = "box" + t
       tr.innerHTML = `
         <td>${i + 1}</td>
         <td>${t.team}</td>
@@ -657,6 +658,7 @@ renderTables();
 </script>
 </body>
 </html>
+
 
 
 
