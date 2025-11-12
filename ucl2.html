@@ -144,6 +144,23 @@
   <div id="matches"></div>
   <div class="container-table">
 <h2>Турнирная таблица</h2>
+
+<table id="standings">
+  <thead>
+    <tr>
+      <th>М</th>
+      <th></th>
+      <th>Команда</th>
+      <th>И</th>
+      <th>В</th>
+      <th>Н</th>
+      <th>П</th>
+      <th>О</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+    
     <table>
       <tr class="tr1">
        <th>#</th>
@@ -538,8 +555,6 @@ document.getElementById("next").onclick = () => {
   }
 };
 
-const tables = document.querySelectorAll("table");
-
 // ==== Создаем селектор тура ====
 const tourSelector = document.createElement("select");
 for (let i = 1; i <= 8; i++) {
@@ -548,7 +563,6 @@ for (let i = 1; i <= 8; i++) {
   opt.textContent = `Тур ${i}`;
   tourSelector.appendChild(opt);
 }
-tourSelector.style.margin = "10px 0";
 document.body.insertBefore(tourSelector, document.querySelector("table"));
 
 // ==== Подсчет и рендер ====
@@ -557,7 +571,7 @@ function calculateStandings(upToTour) {
 
   // 1. Считаем матчи до выбранного тура
   for (let i = 1; i <= upToTour; i++) {
-    const round = matches[`${i}tour`];
+    const round = matches[i + `tour`];
     if (!round) continue;
 
     round.forEach(({ team1, team2, goals1, goals2 }) => {
@@ -615,11 +629,8 @@ function calculateStandings(upToTour) {
 function renderStandings() {
   const tour = parseInt(tourSelector.value);
   const standings = calculateStandings(tour);
-  const table = document.querySelector("table");
-  if (!table) return;
-
-  const tbody = table.querySelector("tbody") || table;
-  tbody.querySelectorAll("tr.tr1, tr.tr2").forEach(tr => tr.remove());
+  const tbody = document.querySelector("#standings tbody");
+  tbody.innerHTML = "";
 
   standings.forEach((t, i) => {
     const tr = document.createElement("tr");
@@ -641,11 +652,10 @@ function renderStandings() {
 // ==== Автообновление при изменении тура ====
 tourSelector.addEventListener("change", renderStandings);
 
-render(); // первый рендер
-  
 // ==== Первый запуск ====
 renderStandings();
 </script>
 </body>
 </html>
+
 
