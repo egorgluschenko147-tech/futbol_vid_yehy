@@ -571,7 +571,7 @@ function calculateStandings(upToTour) {
 
   // 1. Считаем матчи до выбранного тура
   for (let i = 1; i <= upToTour; i++) {
-    const round = matches[`tour${i}`];
+    const round = matches[`${i}tour`];
     if (!round) continue;
 
     round.forEach(({ team1, team2, goals1, goals2 }) => {
@@ -657,6 +657,7 @@ renderStandings();
 </script>
 </body>
 </html>
+
 
 
 
