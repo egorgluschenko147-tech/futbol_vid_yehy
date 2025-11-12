@@ -567,20 +567,28 @@ for (let i = 1; i <= 8; i++) {
   tourSelect.appendChild(opt);
 }
 
+// ==== Подсчет статистики ====
 function calculateStandings(upToTour) {
-  const stats = {};
+  const boxStats = {};
 
   for (let i = 1; i <= upToTour; i++) {
     const round = matches[`${i}tour`];
     if (!round) continue;
 
-    round.forEach(({ team1, team2, goals1, goals2 }) => {
+    round.forEach(({ box, team1, team2, goals1, goals2 }) => {
+      if (!boxStats[box]) boxStats[box] = {};
+
       [team1, team2].forEach(t => {
-        if (!stats[t]) stats[t] = { team: t, games: 0, wins: 0, draws: 0, losses: 0, points: 0 };
+        if (!boxStats[box][t]) boxStats[box][t] = {
+          team: t, games: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0, points: 0
+        };
       });
 
-      const home = stats[team1], away = stats[team2];
+      const home = boxStats[box][team1];
+      const away = boxStats[box][team2];
       home.games++; away.games++;
+      home.goalsFor += goals1; home.goalsAgainst += goals2;
+      away.goalsFor += goals2; away.goalsAgainst += goals1;
 
       if (goals1 > goals2) { home.wins++; home.points += 3; away.losses++; }
       else if (goals1 < goals2) { away.wins++; away.points += 3; home.losses++; }
@@ -588,36 +596,82 @@ function calculateStandings(upToTour) {
     });
   }
 
-  return Object.values(stats).sort((a,b) => b.points - a.points);
+  // сортировка в каждом боксе
+  for (const box in boxStats) {
+    boxStats[box] = Object.values(boxStats[box]).sort((a, b) => {
+      if (b.points !== a.points) return b.points - a.points;
+      const diffA = a.goalsFor - a.goalsAgainst;
+      const diffB = b.goalsFor - b.goalsAgainst;
+      if (diffB !== diffA) return diffB - diffA;
+      return b.goalsFor - a.goalsFor;
+    });
+  }
+
+  return boxStats;
 }
 
-function renderStandings() {
+// ==== Отрисовка ====
+function renderTables() {
   const upTo = parseInt(tourSelect.value);
-  const standings = calculateStandings(upTo);
-  const tbody = document.querySelector("#standings tbody");
-  tbody.innerHTML = "";
+  const standingsByBox = calculateStandings(upTo);
+  const container = document.getElementById("tablesContainer");
+  container.innerHTML = "";
 
-  standings.forEach((t, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${t.team}</td>
-      <td>${t.games}</td>
-      <td>${t.wins}</td>
-      <td>${t.draws}</td>
-      <td>${t.losses}</td>
-      <td>${t.points}</td>
+  for (const box in standingsByBox) {
+    const tableData = standingsByBox[box];
+    const div = document.createElement("div");
+
+    const title = document.createElement("h3");
+    title.textContent = `Бокс: ${box.toUpperCase()}`;
+    div.appendChild(title);
+
+    const table = document.createElement("table");
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>М</th>
+          <th>Команда</th>
+          <th>И</th>
+          <th>В</th>
+          <th>Н</th>
+          <th>П</th>
+          <th>ЗМ</th>
+          <th>ПМ</th>
+          <th>О</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     `;
-    tbody.appendChild(tr);
-  });
+
+    const tbody = table.querySelector("tbody");
+    tableData.forEach((t, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${t.team}</td>
+        <td>${t.games}</td>
+        <td>${t.wins}</td>
+        <td>${t.draws}</td>
+        <td>${t.losses}</td>
+        <td>${t.goalsFor}</td>
+        <td>${t.goalsAgainst}</td>
+        <td>${t.points}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    div.appendChild(table);
+    container.appendChild(div);
+  }
 }
 
-tourSelect.addEventListener("change", renderStandings);
+tourSelect.addEventListener("change", renderTables);
 tourSelect.value = 1;
-renderStandings();
+renderTables();
 </script>
 </body>
 </html>
+
 
 
 
