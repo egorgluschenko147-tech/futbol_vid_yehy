@@ -614,7 +614,7 @@ function renderTables() {
     const table = document.createElement("table");
     table.innerHTML = `
       <thead>
-        <tr>
+        <tr class="tr1">
           <th>М</th>
           <th>Команда</th>
           <th>И</th>
@@ -631,7 +631,7 @@ function renderTables() {
 
     const tbody = table.querySelector("tbody");
     tableData.forEach((t, i) => {
-      const tr = document.createElement("tr");
+      const tr = document.createElement("tr class="tr1"");
       tr.innerHTML = `
         <td>${i + 1}</td>
         <td>${t.team}</td>
@@ -657,6 +657,7 @@ renderTables();
 </script>
 </body>
 </html>
+
 
 
 
