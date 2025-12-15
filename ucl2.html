@@ -279,6 +279,15 @@
 </div>
 </div>
 
+<button onclick="createCookie()">Створити cookie</button>
+
+<script>
+function createCookie() {
+    document.cookie = "user=student; max-age=3600; path=/";
+    alert("Cookie створено");
+}
+</script>
+  
 <script>
 // Данные по матчам
 const matches = {
@@ -664,6 +673,7 @@ renderTables();
 </script>
 </body>
 </html>
+
 
 
 
