@@ -500,6 +500,24 @@ const matches = {
     { box: "box2", team1: "TATRA", team2: "DACIA", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tatra.png", img2: "Dacia.png" },
     { box: "box2", team1: "TUSHEK", team2: "VOLVO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tushek.png", img2: "Volvo.png" },
     { box: "box2", team1: "PIECH", team2: "DEUS", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Piech.png", img2: "DEUS.png" },
+  ],
+  "qf": [
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box", team1: "RENAULT", team2: "RIMAC", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Ford.png", img2: "Porcshe.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
+    { box: "box2", team1: "TESLA", team2: "ALFA ROMEO", goals1: 0, goals2: 0, penGoals1: 0, penGoals2: 0, img1: "Tesla.png", img2: "Alfa Romeo.png" },
   ]
 };
 
@@ -515,11 +533,12 @@ const stageTitles = {
   "5tour": "5-й тур",
   "6tour": "6-й тур",
   "7tour": "7-й тур",
-  "8tour": "8-й тур"
+  "8tour": "8-й тур",
+  "qf": "Четвертьфинал"
 };
 
-const days = ["1qual", "2qual", "3qual", "1tour", "2tour", "3tour", "4tour", "5tour", "6tour", "7tour", "8tour"];
-let currentIndex = 3; // по умолчанию показываем второй этап
+const days = ["1qual", "2qual", "3qual", "1tour", "2tour", "3tour", "4tour", "5tour", "6tour", "7tour", "8tour", "qf"];
+let currentIndex = 11; // по умолчанию показываем второй этап
 
 function render() {
   const day = days[currentIndex];
